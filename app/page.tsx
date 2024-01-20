@@ -6,7 +6,7 @@ import { useState } from "react";
 import { FaWallet, FaRegHeart } from "react-icons/fa6";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Form } from "@/app/component/form";
+import { ChainfessFormData, Form } from "@/app/component/form";
 
 
 export default function Home() {
@@ -50,7 +50,10 @@ export default function Home() {
         text-center ${selectedSection == 'Create Confess'? 'bg-pink-500' : 'bg-gray-900'}`}><h1>Create Confess</h1></button>
            </div> 
            {
-            selectedSection == 'Create Confess' && account && <Form onSubmit={()=>{}}/>
+            selectedSection == 'Create Confess' && account && <Form submitCallback={(data)=>{
+              //LAKUKAN SESUATU DENGAN DATA
+              console.log(data)
+            }}/>
            }
 
            {
