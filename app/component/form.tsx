@@ -41,7 +41,7 @@ const Form: React.FC<FormProps> = ({ submitCallback }) => {
           ref={senderRef}
           type="text"
           className=" p-3 border border-neutral-700 rounded-md w-full text-white px-3 py-3 mt-1 bg-neutral-900"
-          placeholder="Sender Address"
+          placeholder="Sender Name"
         />
       </div>
       <div className="mb-4">
@@ -50,7 +50,7 @@ const Form: React.FC<FormProps> = ({ submitCallback }) => {
           ref={receiverRef}
           type="text"
           className="w-full p-3 border border-neutral-700 rounded-md text-white px-3 py-3 mt-1 bg-neutral-900"
-          placeholder="Receiver Address"
+          placeholder="Receiver Name"
         />
       </div>
       <div className="mb-4">
