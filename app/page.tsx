@@ -340,6 +340,7 @@ const changeToHedera = async () => {
         },
       ],
     });
+    shouldFire()
   } catch (error) {
     // This error code indicates that the chain has not been added to MetaMask.
     shouldFire()
