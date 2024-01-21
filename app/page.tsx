@@ -387,7 +387,7 @@ const changeToHedera = async () => {
   return (
     <div className="flex min-h-screen w-screen overflow-x-hidden flex-col items-center bg-slate-950 px-4 pb-4 pt-16">
       <ToastContainer />
-      <div className="fixed top-0 left-0  flex items-center w-screen bg-gray-950">
+      <div className="fixed top-0 left-0 z-30 flex items-center w-screen bg-gray-950">
         <div className="mx-auto w-full max-w-5xl p-4 flex items-center space-x-4">
           <h1 className="text-2xl font-bold text-white tracking-wider" style={{ fontFamily: 'Lobster' }}>Chainfess</h1>
           <div className="text-pink-500">
