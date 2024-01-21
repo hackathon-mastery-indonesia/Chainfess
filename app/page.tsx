@@ -298,21 +298,42 @@ export default function Home() {
 
   useEffect(()=>{
     if(account != null && web3 != null){
-      helperZKFessList()
+      try{
+        helperZKFessList()
+      }
+      catch(err){
+        toast.info('Please allow hedera service')
+        changeToHedera()
+      }
+      
     }
   },[account, fire ])
 
   async function helperZKFessList() {
-    try {
         const contract = new web3.eth.Contract(contractABI, contractAddress);
-
         const zkFessList = await contract.methods.helperZKFessList().call({ from: account });
         console.log(zkFessList);
+        return zkFessList; 
+}
 
-        return zkFessList;
-    } catch (error) {
-        console.error("Error fetching ZKFess list: ", error);
-    }
+const changeToHedera = async () => {
+  const windowWithEthereum = window as Window & { ethereum?: any };
+  try {
+    await windowWithEthereum.ethereum.request({
+      method: 'wallet_addEthereumChain',
+      params: [
+        {
+          chainId: '0x128',
+          chainName: 'Hedera Testnet',
+          rpcUrls: ['https://testnet.hashio.io/api'] /* ... */,
+        },
+      ],
+    });
+  } catch (error) {
+    // This error code indicates that the chain has not been added to MetaMask.
+    shouldFire()
+    // handle other "switch" errors
+  }
 }
 
   async function getZKFess(id: any) {
@@ -326,16 +347,10 @@ export default function Home() {
     }
 }
   async function createZKFess(sender : string, content : string, receiver: string) {
-    try {
       const contract = new web3.eth.Contract(contractABI, contractAddress);
-  
       await contract.methods.createZKFess(sender, content, receiver)
         .send({ from: account });
       console.log("ZKFess created successfully");
-    } catch (error) {
-      console.error("Error creating ZKFess: ", error);
-      toast.error(`Error creating ZKFess: ${error}`)
-    }
   }
 
   async function connectWallet() {
@@ -347,6 +362,7 @@ export default function Home() {
           setAccount(accounts[0])
           setWeb3(new Web3(windowWithEthereum.ethereum));
           console.log(accounts[0])
+          
       } catch (error) {
           console.error("Error connecting to MetaMask", error);
           toast.error(`Error connecting to MetaMask: ${error}`)
