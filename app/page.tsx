@@ -10,10 +10,11 @@ import { ChainfessFormData, Form } from "@/app/component/form";
 import Web3 from 'web3';
 import MaskedTextField from "./component/masked_textfield";
 import Fess from "./component/fess";
+import crypto from 'crypto';
 
 
 export default function Home() {
-  const contractAddress = "0xa1b2731451d16727dE98164F1FF1Fc58e296dD3d"
+  const contractAddress = "0x54E8dc13e24D70A37D26B20Ce3AF69296ac37A77"
   const [selectedSection, setSelectedSection] = useState<string>('Confess')
   const [account,setAccount] = useState<null|string>(null)
   const [web3, setWeb3] = useState<any>(null)
@@ -293,7 +294,11 @@ export default function Home() {
       "type": "function"
     }
   ];
-
+  function generateSHA256HashSync(text : string) {
+    const hash = crypto.createHash('sha256');
+    hash.update(text);
+    return hash.digest('hex');
+}
   useEffect(()=>{
     connectWallet()
   },[])
@@ -357,7 +362,13 @@ const changeToHedera = async () => {
       console.error("Error fetching ZKFess: ", error);
     }
 }
+
+
   async function createZKFess(sender : string, content : string, receiver: string) {
+      sender = generateSHA256HashSync(sender)
+      receiver = generateSHA256HashSync(receiver)
+      console.log(sender)
+
       const contract = new web3.eth.Contract(contractABI, contractAddress);
       await contract.methods.createZKFess(sender, content, receiver)
         .send({ from: account });
