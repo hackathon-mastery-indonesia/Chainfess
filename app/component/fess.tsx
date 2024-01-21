@@ -1,5 +1,7 @@
 import { useRef, useState } from "react"
 import { FaFaceDizzy, FaFaceGrin, FaFaceLaughWink, FaFaceRollingEyes } from "react-icons/fa6"
+import crypto from 'crypto';
+
 
 type FessProp = {
     receiver: string,
@@ -7,6 +9,12 @@ type FessProp = {
     content: string,
     timestamp: any
     
+}
+
+function generateSHA256HashSync(text : string) {
+    const hash = crypto.createHash('sha256');
+    hash.update(text);
+    return hash.digest('hex');
 }
 
 const Fess: React.FC<FessProp> = ({receiver, sender, content, timestamp}) => {
@@ -19,7 +27,9 @@ const Fess: React.FC<FessProp> = ({receiver, sender, content, timestamp}) => {
     const receiverRef = useRef<HTMLInputElement>(null)
 
     const guessSender = () => {
-        const guess = senderRef.current? senderRef.current.value : ''
+        let guess = senderRef.current? senderRef.current.value : ''
+        guess = generateSHA256HashSync(guess)
+
         if(guess === sender){
             if(senderTimeOutId){
                 clearTimeout(senderTimeOutId)
@@ -43,7 +53,8 @@ const Fess: React.FC<FessProp> = ({receiver, sender, content, timestamp}) => {
 
     }
     const guessReceiver = () => {
-        const guess = receiverRef.current? receiverRef.current.value : ''
+        let guess = receiverRef.current? receiverRef.current.value : ''
+        guess = generateSHA256HashSync(guess)
         if(guess === receiver){
             if(receiverTimeOutId){
                 clearTimeout(receiverTimeOutId)
@@ -78,7 +89,7 @@ const Fess: React.FC<FessProp> = ({receiver, sender, content, timestamp}) => {
         </div>
         <div className="col-span-1 lg:col-span-2 ">
         <div className="mb-4">
-        <label className="block text-gray-200 text-sm font-semibold mb-1">Sender</label>
+        <label className="block text-gray-200 text-sm font-semibold mb-1">Sender : {sender}</label>
         <div className="flex items-center space-x-2">
         <input required
           ref={senderRef}
@@ -97,7 +108,7 @@ const Fess: React.FC<FessProp> = ({receiver, sender, content, timestamp}) => {
         
       </div>
       <div className="mb-4">
-        <label className="block text-gray-200 text-sm font-semibold mb-1">Receiver</label>
+        <label className="block text-gray-200 text-sm font-semibold mb-1">Receiver : {receiver}</label>
         <div className="flex items-center space-x-2">
         <input required
           ref={receiverRef}
