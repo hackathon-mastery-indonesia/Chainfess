@@ -2,7 +2,7 @@
 import Image from "next/image";
 import '@fontsource/lobster';
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaWallet, FaRegHeart } from "react-icons/fa6";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -16,6 +16,11 @@ export default function Home() {
   const [selectedSection, setSelectedSection] = useState<string>('Confess')
   const [account,setAccount] = useState<null|string>(null)
   const [web3, setWeb3] = useState<any>(null)
+  const [fire, setFire] = useState<boolean>(false)
+
+  const shouldFire = () => {
+    setFire(prev => !prev)
+  }
 
   const contractABI = [
     {
@@ -287,6 +292,39 @@ export default function Home() {
     }
   ];
 
+  useEffect(()=>{
+    connectWallet()
+  },[])
+
+  useEffect(()=>{
+    if(account != null && web3 != null){
+      helperZKFessList()
+    }
+  },[account, fire ])
+
+  async function helperZKFessList() {
+    try {
+        const contract = new web3.eth.Contract(contractABI, contractAddress);
+
+        const zkFessList = await contract.methods.helperZKFessList().call({ from: account });
+        console.log(zkFessList);
+
+        return zkFessList;
+    } catch (error) {
+        console.error("Error fetching ZKFess list: ", error);
+    }
+}
+
+  async function getZKFess(id: any) {
+    try {
+      const contract = new web3.eth.Contract(contractABI, contractAddress);
+      const zkFess = await contract.methods.getZKFess(id).call();
+      console.log(zkFess);
+      return zkFess;
+    } catch (error) {
+      console.error("Error fetching ZKFess: ", error);
+    }
+}
   async function createZKFess(sender : string, content : string, receiver: string) {
     try {
       const contract = new web3.eth.Contract(contractABI, contractAddress);
