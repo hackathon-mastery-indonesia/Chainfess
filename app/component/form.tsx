@@ -1,12 +1,12 @@
-import { useRef } from "react";
+import { FormEvent, useRef } from "react";
 
 type FormProps = {
     submitCallback: (data: ChainfessFormData) => void,
 }
 export type ChainfessFormData = {
-  sender: string | null,
-  receiver: string | null,
-  message: string | null,
+  sender: string,
+  receiver: string,
+  message: string,
   timestamp: string
 }
 
@@ -21,7 +21,8 @@ const Form: React.FC<FormProps> = ({ submitCallback }) => {
   const senderRef = useRef<HTMLInputElement>(null)
   const receiverRef = useRef<HTMLInputElement>(null)
   const messageRef  = useRef<HTMLTextAreaElement>(null)
-  const submitForm = async () => {
+  const submitForm = async (e: FormEvent) => {
+    e.preventDefault()
     console.log('SUBMITTING')
     const data : ChainfessFormData = {
       sender: senderRef.current? senderRef.current.value : '',
@@ -40,7 +41,7 @@ const Form: React.FC<FormProps> = ({ submitCallback }) => {
           ref={senderRef}
           type="text"
           className=" p-3 border border-neutral-700 rounded-md w-full text-white px-3 py-3 mt-1 bg-neutral-900"
-          placeholder="Your name"
+          placeholder="Sender Address"
         />
       </div>
       <div className="mb-4">
@@ -49,7 +50,7 @@ const Form: React.FC<FormProps> = ({ submitCallback }) => {
           ref={receiverRef}
           type="text"
           className="w-full p-3 border border-neutral-700 rounded-md text-white px-3 py-3 mt-1 bg-neutral-900"
-          placeholder="Recipient's name"
+          placeholder="Receiver Address"
         />
       </div>
       <div className="mb-4">
