@@ -12,6 +12,7 @@ contract ChainFess{
     mapping(address => uint[]) public ownerZKFessList;
 
     address public owner;
+    
 
     struct ZKFess {
         string sender;
@@ -33,6 +34,7 @@ contract ChainFess{
         zkFessToOwner[tokenCounter] = msg.sender;
         ownerZKFessCount[msg.sender]++;
         ownerZKFessList[msg.sender].push(tokenCounter);
+
     }
 
     function getZKFess(uint _id) public view returns(string memory, string memory, string memory, uint256){
@@ -48,17 +50,12 @@ contract ChainFess{
     }
 
     function helperZKFessList() public view returns(ZKFess[] memory){
-        uint[] memory list = ownerZKFessList[msg.sender];
-        ZKFess[] memory zkFessList = new ZKFess[](list.length);
-        for(uint i = 0; i < list.length; i++){
-            zkFessList[i] = zkFesses[list[i]];
+        ZKFess[] memory zkFessList = new ZKFess[](tokenCounter);
+        for(uint i = 0; i < tokenCounter; i++){
+            zkFessList[i] = zkFesses[i+1];
         }
         return zkFessList;
-    }
 
-    function getOwnerZKFess(uint _id) public view returns(string memory, string memory, string memory, uint256){
-        return (zkFesses[_id].sender, zkFesses[_id].content, zkFesses[_id].receiver, zkFesses[_id].timestamp);
     }
-
 
 }
