@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ChainfessFormData, Form } from "@/app/component/form";
 import Web3 from 'web3';
 import MaskedTextField from "./component/masked_textfield";
+import Fess from "./component/fess";
 
 
 export default function Home() {
@@ -17,6 +18,7 @@ export default function Home() {
   const [account,setAccount] = useState<null|string>(null)
   const [web3, setWeb3] = useState<any>(null)
   const [fire, setFire] = useState<boolean>(false)
+  const [fess, setFess] = useState<any []>([])
 
   const shouldFire = () => {
     setFire(prev => !prev)
@@ -299,7 +301,8 @@ export default function Home() {
   useEffect(()=>{
     if(account != null && web3 != null){
       try{
-        helperZKFessList()
+        helperZKFessList() 
+        
       }
       catch(err){
         toast.info('Please allow hedera service')
@@ -312,8 +315,16 @@ export default function Home() {
   async function helperZKFessList() {
         const contract = new web3.eth.Contract(contractABI, contractAddress);
         const zkFessList = await contract.methods.helperZKFessList().call({ from: account });
-        console.log(zkFessList);
-        return zkFessList; 
+        const lst : any [] = []
+        zkFessList.forEach((fessData : any)=>{
+          lst.push({
+            content: fessData.content,
+            receiver: fessData.receiver,
+            sender: fessData.sender,
+            timestamp: fessData.timestamp
+          })
+        })
+        setFess(lst)
 }
 
 const changeToHedera = async () => {
@@ -374,7 +385,7 @@ const changeToHedera = async () => {
 }
  
   return (
-    <div className="flex min-h-screen w-screen flex-col items-center bg-slate-950 px-4 pb-4 pt-16">
+    <div className="flex min-h-screen w-screen overflow-x-hidden flex-col items-center bg-slate-950 px-4 pb-4 pt-16">
       <ToastContainer />
       <div className="fixed top-0 left-0  flex items-center w-screen bg-gray-950">
         <div className="mx-auto w-full max-w-5xl p-4 flex items-center space-x-4">
@@ -384,7 +395,7 @@ const changeToHedera = async () => {
           </div>
         </div>
       </div>
-      <div className="max-w-5xl w-full items-center grow  text-sm flex flex-col">
+      <div className="max-w-5xl w-full items-center grow overflow-x-hidden text-sm flex flex-col">
         {account && <div className="flex w-full justify-center mt-2">
           <div className="w-full max-w-md">
             <MaskedTextField strKey="Your Account Address" value={account}/>
@@ -392,9 +403,9 @@ const changeToHedera = async () => {
         </div>
         }
         {
-          <div className="flex flex-col items-center w-full grow  ">
-           <div className="flex justify-center items-center w-full space-x-2 mx-auto p-4  md:max-w-96">
-           <button onClick={()=>{
+          <div className="flex flex-col items-center w-full grow overflow-x-hidden  ">
+           <div className="flex justify-center items-center w-full space-x-2 mx-auto p-4 overflow-x-hidden  md:max-w-96">
+           <button onClick={()=>{ 
             setSelectedSection('Confess')
         }} className={`px-3 py-2 w-1/2 rounded-md flex items-center justify-center
         text-center ${selectedSection == 'Confess'? 'bg-pink-500' : 'bg-gray-900'}`}><h1>Confession</h1></button>
@@ -406,12 +417,34 @@ const changeToHedera = async () => {
            {
             selectedSection == 'Create Confess' && account && <Form submitCallback={async (data)=>{
               await createZKFess(data.sender, data.message, data.receiver)
+              shouldFire()
+              setSelectedSection('Confess')
             }}/>
+           }
+           {
+            selectedSection == 'Confess' && account &&
+            <div className="flex flex-col w-full grow ">
+              { fess.length == 0 &&
+                <div className="mx-auto my-auto pb-12">
+                <div>
+                  <h1 className="text-white text-center mb-4 font-semibold">There is no confession yet</h1>
+                </div>
+              </div>
+              }
+              {
+                fess.length != 0 && fess.map((fessData, index)=>{
+                  return <Fess key={index} receiver={fessData.receiver} sender={fessData.sender} content={fessData.content} timestamp={fessData.times}/>
+                })
+              }
+             
+            </div>
            }
 
 
+
+
            {
-            selectedSection == 'Create Confess' && 
+              
               !account && <div className="mx-auto my-auto pb-12">
                 <div>
                   <h1 className="text-white text-center mb-4 font-semibold">You are not authenticated. Please Sign in.</h1>
