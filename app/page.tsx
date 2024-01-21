@@ -435,7 +435,7 @@ const changeToHedera = async () => {
            }
            {
             selectedSection == 'Confess' && account &&
-            <div className="flex flex-col w-full grow ">
+            <div className="flex flex-col w-full grow overflow-x-hidden ">
               { fess.length == 0 &&
                 <div className="mx-auto my-auto pb-12">
                 <div>

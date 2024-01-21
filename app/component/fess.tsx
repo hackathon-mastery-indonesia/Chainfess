@@ -77,7 +77,7 @@ const Fess: React.FC<FessProp> = ({receiver, sender, content, timestamp}) => {
         }
 
     }
-    return <div className="w-full mb-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 min-h-24 bg-pink-500 gap-4 p-4 rounded-md">
+    return <div className="w-full overflow-x-hidden mb-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 min-h-24 bg-pink-500 gap-4 p-4 rounded-md">
         <div className=" col-span-1 lg:col-span-3 ">
          <div className="">
         <label className="block text-gray-200 text-sm font-semibold mb-1">Message</label>
@@ -89,13 +89,14 @@ const Fess: React.FC<FessProp> = ({receiver, sender, content, timestamp}) => {
         </div>
         <div className="col-span-1 lg:col-span-2 ">
         <div className="mb-4">
-        <label className="block text-gray-200 text-sm font-semibold mb-1">Sender : {sender}</label>
+        <label className="block text-gray-200 text-sm font-semibold mb-1 whitespace-break-spaces break-words">Sender : <span className="text-indigo-600">
+        {sender}</span></label>
         <div className="flex items-center space-x-2">
         <input required
           ref={senderRef}
           type="text"
           className="grow p-3 border border-neutral-700 rounded-md text-white px-3 py-3 mt-1 bg-neutral-900"
-          placeholder="Guess Sender Address"
+          placeholder="Guess Sender"
         />
         <div className={`${senderMode == 'QUESTION'? 'text-white' : senderMode == 'TRUE_ANSWER'? 'text-green-500' : 'text-red-800'}`} onClick={guessSender}>
         {
@@ -108,13 +109,14 @@ const Fess: React.FC<FessProp> = ({receiver, sender, content, timestamp}) => {
         
       </div>
       <div className="mb-4">
-        <label className="block text-gray-200 text-sm font-semibold mb-1">Receiver : {receiver}</label>
+        <label className="block text-gray-200 text-sm font-semibold mb-1 whitespace-break-spaces break-words">Receiver : <span className="text-indigo-600">
+        {receiver}</span></label>
         <div className="flex items-center space-x-2">
         <input required
           ref={receiverRef}
           type="text"
           className="grow p-3 border border-neutral-700 rounded-md text-white px-3 py-3 mt-1 bg-neutral-900"
-          placeholder="Guess Receiver Address"
+          placeholder="Guess Receiver"
         />
         <div className={`${receiverMode == 'QUESTION'? 'text-white' : receiverMode == 'TRUE_ANSWER'? 'text-green-500' : 'text-red-800'}`} onClick={guessReceiver}>
         {

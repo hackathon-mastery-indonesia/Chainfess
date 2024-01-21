@@ -15,7 +15,7 @@ export default function RootLayout({
   return (
     <React.StrictMode>
       <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className +' overflow-x-hidden'}>{children}</body>
     </html>
     </React.StrictMode>
     
