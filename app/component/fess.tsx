@@ -96,7 +96,7 @@ const Fess: React.FC<FessProp> = ({receiver, sender, content, timestamp}) => {
           ref={senderRef}
           type="text"
           className="grow p-3 border border-neutral-700 rounded-md text-white px-3 py-3 mt-1 bg-neutral-900"
-          placeholder="Guess Sender"
+          placeholder="Guess Sender Name"
         />
         <div className={`${senderMode == 'QUESTION'? 'text-white' : senderMode == 'TRUE_ANSWER'? 'text-green-500' : 'text-red-800'}`} onClick={guessSender}>
         {
@@ -116,7 +116,7 @@ const Fess: React.FC<FessProp> = ({receiver, sender, content, timestamp}) => {
           ref={receiverRef}
           type="text"
           className="grow p-3 border border-neutral-700 rounded-md text-white px-3 py-3 mt-1 bg-neutral-900"
-          placeholder="Guess Receiver"
+          placeholder="Guess Receiver Name"
         />
         <div className={`${receiverMode == 'QUESTION'? 'text-white' : receiverMode == 'TRUE_ANSWER'? 'text-green-500' : 'text-red-800'}`} onClick={guessReceiver}>
         {
